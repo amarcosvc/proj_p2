@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
+
 import '../models/ticket_model.dart';
 
 // Modal reutilizável para abertura e edição de tickets
@@ -42,7 +43,9 @@ class _TicketFormDialogState extends State<TicketFormDialog> {
   void initState() {
     super.initState();
     _titleController = TextEditingController(text: widget.ticket?.title ?? '');
-    _descController = TextEditingController(text: widget.ticket?.description ?? '');
+    _descController = TextEditingController(
+      text: widget.ticket?.description ?? '',
+    );
     _category = widget.ticket?.category ?? 'Suporte Técnico';
     _priority = widget.ticket?.priority ?? 'Média';
     _status = widget.ticket?.status ?? 'Aberto';
@@ -93,12 +96,13 @@ class _TicketFormDialogState extends State<TicketFormDialog> {
                     labelText: 'Assunto / Título *',
                     border: OutlineInputBorder(),
                   ),
-                  validator: (v) =>
-                      (v == null || v.trim().isEmpty) ? 'Informe o assunto do ticket' : null,
+                  validator: (v) => (v == null || v.trim().isEmpty)
+                      ? 'Informe o assunto do ticket'
+                      : null,
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  value: _category,
+                  initialValue: _category,
                   decoration: const InputDecoration(
                     labelText: 'Categoria',
                     border: OutlineInputBorder(),
@@ -110,7 +114,7 @@ class _TicketFormDialogState extends State<TicketFormDialog> {
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  value: _priority,
+                  initialValue: _priority,
                   decoration: const InputDecoration(
                     labelText: 'Prioridade',
                     border: OutlineInputBorder(),
@@ -123,9 +127,9 @@ class _TicketFormDialogState extends State<TicketFormDialog> {
                 if (isEditing) ...[
                   const SizedBox(height: 16),
                   DropdownButtonFormField<String>(
-                    value: _status,
+                    initialValue: _status,
                     decoration: const InputDecoration(
-                      labelText: 'Status do Chamado',
+                      labelText: 'Situação',
                       border: OutlineInputBorder(),
                     ),
                     items: _statuses
@@ -142,8 +146,9 @@ class _TicketFormDialogState extends State<TicketFormDialog> {
                     border: OutlineInputBorder(),
                   ),
                   maxLines: 3,
-                  validator: (v) =>
-                      (v == null || v.trim().isEmpty) ? 'Descreva o problema' : null,
+                  validator: (v) => (v == null || v.trim().isEmpty)
+                      ? 'Descreva o problema'
+                      : null,
                 ),
               ],
             ),
@@ -161,7 +166,10 @@ class _TicketFormDialogState extends State<TicketFormDialog> {
               ? const SizedBox(
                   width: 16,
                   height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.white,
+                  ),
                 )
               : const Text('Salvar Ticket'),
         ),

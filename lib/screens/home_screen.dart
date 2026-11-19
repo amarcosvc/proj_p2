@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
+
 import '../models/ticket_model.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
@@ -105,7 +106,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userName = AuthService.currentUser?.userMetadata?['name'] ??
+    final userName =
+        AuthService.currentUser?.userMetadata?['name'] ??
         AuthService.currentUser?.email ??
         'Usuário';
 
@@ -134,83 +136,106 @@ class _HomeScreenState extends State<HomeScreen> {
           child: _isLoading
               ? const Center(child: CircularProgressIndicator())
               : _tickets.isEmpty
-                  ? const Center(
-                      child: Text(
-                        'Nenhum chamado aberto.\nClique em "Novo Ticket" para registrar uma solicitação.',
-                        textAlign: TextAlign.center,
-                      ),
-                    )
-                  : ListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: _tickets.length,
-                      itemBuilder: (context, index) {
-                        final ticket = _tickets[index];
-                        return Card(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+              ? const Center(
+                  child: Text(
+                    'Nenhum chamado aberto.\nClique em "Novo Ticket" para registrar uma solicitação.',
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              : ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: _tickets.length,
+                  itemBuilder: (context, index) {
+                    final ticket = _tickets[index];
+                    return Card(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
                               children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        ticket.title,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium
-                                            ?.copyWith(fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Chip(
-                                      label: Text(
-                                        ticket.status,
-                                        style: const TextStyle(color: Colors.white, fontSize: 12),
-                                      ),
-                                      backgroundColor: _statusColor(ticket.status),
-                                      padding: EdgeInsets.zero,
-                                    ),
-                                    const SizedBox(width: 8),
-                                    IconButton(
-                                      icon: const Icon(Icons.edit, color: Colors.blue),
-                                      tooltip: 'Editar ticket',
-                                      onPressed: () => _openForm(ticket: ticket),
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.delete, color: Colors.red),
-                                      tooltip: 'Excluir ticket',
-                                      onPressed: () => _deleteTicket(ticket.id!),
-                                    ),
-                                  ],
+                                Expanded(
+                                  child: Text(
+                                    ticket.title,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ),
                                 ),
-                                const SizedBox(height: 6),
-                                Text(ticket.description),
-                                const SizedBox(height: 12),
-                                Wrap(
-                                  spacing: 8,
-                                  children: [
-                                    Chip(
-                                      avatar: const Icon(Icons.category, size: 16),
-                                      label: Text(ticket.category),
-                                    ),
-                                    Chip(
-                                      label: Text(
-                                        'Prioridade: ${ticket.priority}',
-                                        style: TextStyle(
-                                          color: _priorityColor(ticket.priority),
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                                Tooltip(
+                                  message: 'Situação: ${ticket.status}', // Texto exibido ao passar o mouse ou pressionar
+                                  child: Chip(
+                                    label: Text(
+                                      ticket.status,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
                                       ),
                                     ),
-                                  ],
+                                    backgroundColor: _statusColor(
+                                      ticket.status,
+                                    ),
+                                    padding: EdgeInsets.zero,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    color: Colors.blue,
+                                  ),
+                                  tooltip: 'Editar ticket',
+                                  onPressed: () => _openForm(ticket: ticket),
+                                ),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                  tooltip: 'Excluir ticket',
+                                  onPressed: () => _deleteTicket(ticket.id!),
                                 ),
                               ],
                             ),
-                          ),
-                        );
-                      },
-                    ),
+                            const SizedBox(height: 6),
+                            Text(ticket.description),
+                            const SizedBox(height: 12),
+                            Wrap(
+                              spacing: 8,
+                              children: [
+                                Chip(
+                                  avatar: const Icon(Icons.category, size: 16),
+                                  label: Text(ticket.category),
+                                ),
+                                Chip(
+                                  label: Text(
+                                    'Prioridade: ${ticket.priority}',
+                                    style: TextStyle(
+                                      color: _priorityColor(ticket.priority),
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                Chip(
+                                  label: Text(
+                                    'Situação: ${ticket.status}',
+                                    style: TextStyle(
+                                      color: _statusColor(ticket.status),
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
